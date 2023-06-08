@@ -8,6 +8,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
 
 public class StackTest {
     static Stack<Integer> stack;
@@ -31,21 +34,43 @@ public class StackTest {
     }
 
     @BeforeEach
+    public void initToString() {
+        stack = new Stack<>();
+    }
+
+    @Test
+    public void testToString(){
+        //arrange
+        String result = "1->2->3";
+        stack.push(3);
+        stack.push(2);
+        stack.push(1);
+
+        //act
+        String expended = stack.toString();
+
+        //assert
+
+        assertThat(expended, equalTo(result));
+    }
+
+    @BeforeEach
     public void initPush() {
         stack = new Stack<>();
     }
 
     @ParameterizedTest
     @MethodSource("pushParams")
-    public void testPush() {
+    public void testPush(int a) {
         // arrange
-        int a = 5;
+        Node node = new Node(a);
+        Stack<Integer> newStack = new Stack<>(node);
 
         // act
-        Executable executable = () -> stack.push(a);
+        stack.push(a);
 
-        //asser
-        Assertions.assertDoesNotThrow(executable);
+        //assert
+        assertThat(stack.toString(), equalTo(newStack.toString()));
 
     }
 
@@ -55,8 +80,8 @@ public class StackTest {
         // act
         int expected = stack.pop();
 
-        //asser
-        Assertions.assertEquals(expected, result);
+        //assert
+        assertThat(expected, is(equalTo(result)));
     }
 
     @BeforeEach
@@ -71,7 +96,27 @@ public class StackTest {
         //act
         Integer expected = stack.pop();
 
-        //asser
-        Assertions.assertNull(expected);
+        //assert
+        assertThat(expected,nullValue());
+    }
+
+    @Test
+    public  void testReverse(){
+        //arrange
+        stack = new Stack<>();
+        stack.push(0);
+        stack.push(1);
+        stack.push(2);
+
+        Stack<Integer> myStack = new Stack<>();
+        myStack.push(2);
+        myStack.push(1);
+        myStack.push(0);
+
+        //act
+        Stack<Integer> resultStack = stack.reverse();
+
+        //assert
+        assertThat(resultStack.toString(), equalTo(myStack.toString()));
     }
 }

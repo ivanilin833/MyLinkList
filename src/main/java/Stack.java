@@ -3,6 +3,13 @@ import java.util.Objects;
 public class Stack<T> implements Cloneable{
     private Node<T> head;
 
+    public Stack() {
+    }
+
+    public Stack(Node<T> head) {
+        this.head = head;
+    }
+
     public void push(T value){
         if (head == null){
             head = new Node<>(value);
